@@ -17,10 +17,14 @@ This project is designed for learning and practice, and does **not rely on sciki
 
 ## 📁 Structure
 
-- `knn/`: Jupyter Notebook + `.py` implementation of KNN
-- `kmeans/`: K-Means clustering demo
-- `utils/`: Common helper functions
-- `data/`: Sample datasets (if any)
+| File              | Description                                      |
+|-------------------|--------------------------------------------------|
+| `knn.py`          | K-Nearest Neighbors implementation                |
+| `knn_data.csv`    | Dataset for testing `knn.py`                      |
+| `kmeans.py`       | K-Means Clustering implementation                 |
+| `kmeans_data.csv` | Dataset for testing `kmeans.py`                   |
+| `LICENSE`         | Project license (MIT)                             |
+| `README.md`       | This file 😄  
 
 ---
 
@@ -28,8 +32,8 @@ This project is designed for learning and practice, and does **not rely on sciki
 
 - Python 3.11+
 - Visual Studio Code
-- Jupyter Notebook (for optional visualization)
 - NumPy, Pandas, matplotlib (minimal use, for plotting)
+- 'csv' module for data loading
 
 ---
 
