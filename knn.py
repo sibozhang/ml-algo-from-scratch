@@ -15,7 +15,7 @@ def Standardization(data):
     data_std = np.zeros_like(data, dtype=float)
     for i in range(data.shape[1]):
         col = data[:, i]
-        data_std = (col - np.mean(col)) - np.std(col)
+        data_std[:, i] = (col - np.mean(col)) / np.std(col)
     return data_std
 
 
