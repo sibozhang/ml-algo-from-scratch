@@ -14,7 +14,21 @@ def Normalization(data):
     return data_norm
 
 
-def initialize_centroids(data, k, method="kmeans_uniform"):
+def mode_selector():
+    print("1. kmeans_uniform\n" "2. kmeans_random\n" "3. kmeans++\n")
+    while True:
+        mode = input("Please select a mode:")
+        if mode == "1":
+            return "kmeans_uniform"
+        elif mode == "2":
+            return "2. kmeans_random"
+        elif mode == "3":
+            return "kmeans++"
+        else:
+            print("Illegal input! Please try again.")
+
+
+def initialize_centroids(data, k, method):
     if method == "kmeans_uniform":
         max_vals = np.max(data, axis=0)
         min_vals = np.min(data, axis=0)
@@ -25,7 +39,8 @@ def initialize_centroids(data, k, method="kmeans_uniform"):
     if method == "kmeans++":
         pass
     if method == "kmeans_random":
-        pass
+        indices = np.random.choice(data.shape[0], size=k, replace=False)
+        return data[indices]
 
 
 def assign_clusters(data, centroids):
@@ -36,9 +51,9 @@ def assign_clusters(data, centroids):
         if euclidean_distance(data[i], centroids[0]) > euclidean_distance(
             data[i], centroids[1]
         ):
-            labels[i] = 0
-        else:
             labels[i] = 1
+        else:
+            labels[i] = 0
         print("point label is: ", labels[i])
     return labels
 
@@ -64,24 +79,18 @@ def has_converged(old_centroids, new_centroids, tol=1e-4):
     return diff < tol
 
 
-def kmeans(data, k, max_iters=20, init_method="kmeans_uniform"):
+def kmeans(data, k, init_method, max_iters=100):
     centroids = initialize_centroids(data, k, method=init_method)
-    # print(f"Centroids: {centroids}")
+    print(f"Centroids: {centroids}")
     for i in range(max_iters):
         labels = assign_clusters(data, centroids)
         new_centroids = update_centroids(data, labels, k)
-        # print(f"New Centroids: {new_centroids}")
-        if i == 0:
-            with open("kmeans_log.txt", "w") as f:
-                f.write(f"initialize_centroids: {centroids}\n")
-                f.write(f"Iteration {i+1}:\n")
-                f.write(f"Labels: {labels}\n")
-                f.write(f"Centroids:\n{new_centroids}\n\n")
-        else:
-            with open("kmeans_log.txt", "a") as f:
-                f.write(f"Iteration {i+1}:\n")
-                f.write(f"Labels: {labels}\n")
-                f.write(f"Centroids:\n{new_centroids}\n\n")
+        print(f"New Centroids: {new_centroids}")
+
+        with open("kmeans_log.txt", "a") as f:
+            f.write(f"Iteration {i+1}:\n")
+            f.write(f"Labels: {labels}\n")
+            f.write(f"Centroids:\n{new_centroids}\n\n")
 
         if has_converged(centroids, new_centroids):
             break
@@ -94,6 +103,7 @@ df = pd.read_csv("kmeans_data.csv")
 data = df.to_numpy()
 features = df[["Bitter", "Acidity"]].to_numpy()
 features_norm = Normalization(features)
-centroids, labels = kmeans(features_norm, k)
-# print(f"centroids: {centroids}")
-# print(f"labels: {labels}")
+init_method = mode_selector()
+centroids, labels = kmeans(features_norm, k, init_method)
+print(f"centroids: {centroids}")
+print(f"labels: {labels}")
